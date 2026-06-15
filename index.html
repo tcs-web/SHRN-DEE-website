@@ -233,9 +233,9 @@ td,th{border:1px solid #333;padding:4px;text-align:left}
     <p style="font-size:11px"><b>Phone:</b> <a href="tel:0795436535" style="color:var(--gold)">079 543 6535</a></p>
     <p style="font-size:11px"><b>Email:</b> <a href="mailto:shrn.dee@gmail.com" style="color:var(--gold)">shrn.dee@gmail.com</a></p>
     <p style="font-size:11px"><b>Address:</b> 235 Phelindaba Sec, Bothashoek, Burgersfort, Limpopo 1150</p>
-    <p style="font-size:11px"><b>Orders:</b> Pay deposit % on checkout, balance on delivery</p>
+    <p style="font-size:11px"><b>Orders:</b> Pay deposit 30 % on checkout, balance on delivery</p>
     <button class="btn btn-gold" onclick="whatsapp('Hi SHRN DEE, I want to place an order')">WhatsApp Orders</button>
-    <button class="btn btn-outline" onclick="window.location.href='mailto:shrn.dee@gmail.com'">Email Us</button>
+    <button class="btn btn-outline" onclick="window.location.href='mailto:shrn.dee01@gmail.com'">Email Us</button>
   </div>
 
 <!-- CART -->
@@ -254,7 +254,7 @@ td,th{border:1px solid #333;padding:4px;text-align:left}
 <script>
 let cart = [];
 const depositPercent = 30; // Change deposit %
-const whatsappNumber = '2780795436535'; // Your WhatsApp number with country code
+const whatsappNumber = '27795436535'; // Your WhatsApp number with country code
 const emailAddress = 'shrn.dee@gmail.com';
 
 const products = {
@@ -326,7 +326,7 @@ function updateCart(){
 function checkout(){
   if(cart.length==0)return alert('Cart is empty');
   let total = cart.reduce((a,b)=>a+b.price,0);
-  let deposit = Math.round(total*depositPercent/100);
+  let deposit = Math.round(total*depositPercent30/100);
   let msg = `Hi SHRN DEE PTY LTD\nNew Order:\n${cart.map(c=>c.name+' R'+c.price).join('\n')}\n\nTotal: R${total}\nDeposit ${depositPercent}%: R${deposit}\n\nReg: 2026/115254/07\nRef: 9890360192\nPhone: 079 543 6535\nEmail: shrn.dee@gmail.com\nAddress: 235 Phelindaba Sec, Bothashoek, Burgersfort 1150`;
   whatsapp(msg);
 }
@@ -362,7 +362,7 @@ function generateLabel(){
     <p>${text}</p>
     <p style="font-size:8px">Reg: 2026/115254/07</p>
     <p style="font-size:8px">Tel: 079 543 6535</p>
-    <p style="font-size:8px">shrn.dee@gmail.com</p>
+    <p style="font-size:8px">shrn.dee01@gmail.com</p>
   </div>`;
 }
 
@@ -373,7 +373,8 @@ function printLabel(){
 // 1. DELIVERY ZONES
 const zones = [
   {area:"Burgersfort CBD", fee:40},
-  {area:"Bothashoek", fee:35},
+  {area:"Praktiseer", fee:25},
+  {area:"Bothashoek", fee:20},
   {area:"Steelpoort", fee:60},
   {area:"Lydenburg", fee:80},
   {area:"Twickenham", fee:55}
