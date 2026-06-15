@@ -12,6 +12,8 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',system-ui,sans-serif}
 body{background:var(--bg);color:var(--text);padding-bottom:100px}
 header{background:linear-gradient(135deg,var(--accent),var(--accent2));padding:18px;text-align:center;position:sticky;top:0;z-index:20}
+header img{max-width:180px;width:70%;height:auto;margin:0 auto 8px;display:block;filter:drop-shadow(0 0 12px #ff1493) drop-shadow(0 0 20px #ffd700);animation:glow 2s ease-in-out infinite alternate}
+@keyframes glow{from{filter:drop-shadow(0 0 8px #ff1493)}to{filter:drop-shadow(0 0 20px #ffd700) drop-shadow(0 0 30px #ff1493)}}
 header h1{font-size:18px;letter-spacing:1px}
 header p{font-size:10px;opacity:0.9;margin-top:3px}
 
@@ -50,17 +52,19 @@ nav button.active{background:var(--accent)}
 
 input,select,textarea{width:100%;padding:7px;border-radius:6px;border:1px solid #333;background:#0f0f18;color:var(--text);font-size:11px;margin-top:4px}
 
+.zone{border:1px dashed var(--accent);padding:6px;border-radius:8px;margin:4px 0;font-size:10px;display:flex;justify-content:space-between}
+.stock-low{color:#ff6b6b;font-weight:bold}
+table{width:100%;font-size:9px;border-collapse:collapse}
+td,th{border:1px solid #333;padding:4px;text-align:left}
+
 @media(min-width:720px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media print{.no-print{display:none}body{background:#fff;color:#000}}
 </style>
 </head>
 <body>
 
-<header style="padding:14px">
-  <!-- LOGO -->
-  <img src="shrndee-logo.png" alt="SHRN DEE Logo" 
-       style="max-width:50px;width:20%;height:auto;margin:0 auto 10px;display:block;
-              filter:drop-shadow(0 0 12px #ff1493) drop-shadow(0 0 20px #ffd700);">
-  
+<header>
+  <img src="logo.png" alt="SHRN DEE Logo">
   <h1>SHRN DEE PTY LTD</h1>
   <p>Boutique Store • Cosmetics • Apparel • Equipment Hire • Mobile Fun Fair</p>
   <p style="font-size:8px">Reg: 2026/115254/07 | Ref: 9890360192 | 📞 079 543 6535 | 📧 shrn.dee@gmail.com</p>
@@ -69,9 +73,12 @@ input,select,textarea{width:100%;padding:7px;border-radius:6px;border:1px solid 
 <nav>
   <button class="active" onclick="tab('home',this)">Home</button>
   <button onclick="tab('cosmetics',this)">Cosmetics</button>
-  <button onclick="tab('apparel',this)">Apparel/Jewellery</button>
+  <button onclick="tab('apparel',this)">Apparel</button>
   <button onclick="tab('equipment',this)">Equipment</button>
-  <button onclick="tab('services',this)">Services</button>
+  <button onclick="tab('delivery',this)">Delivery Zones</button>
+  <button onclick="tab('admin',this)">Admin</button>
+  <button onclick="tab('invoice',this)">Invoice</button>
+  <button onclick="tab('qr',this)">QR Codes</button>
   <button onclick="tab('card',this)">Business Card</button>
   <button onclick="tab('labels',this)">Labels</button>
   <button onclick="tab('contact',this)">Contact</button>
@@ -82,27 +89,8 @@ input,select,textarea{width:100%;padding:7px;border-radius:6px;border:1px solid 
   <div class="card">
     <h3>Welcome to SHRN DEE <span class="badge">Est 2026</span></h3>
     <p style="font-size:11px;line-height:1.5">
-    Online boutique store delivering to designated areas. Future goal: global couriers.
-    Order with deposit %. We create jobs in hands-on, delivery & monitoring.
-    Fun for all ages, food that keeps you smiling.
+    Online boutique store delivering to designated areas. Order with deposit %. We create jobs in hands-on, delivery & monitoring.
     </p>
-  </div>
-
-  <div class="card">
-    <h3>What We Do</h3>
-    <p style="font-size:11px">
-    1. Avon Cosmetics - available stock, order with deposit %<br>
-    2. Apparel & Jewellery - SHEIN, Temu + trusted suppliers<br>
-    3. Starter Business Kits - fryers, fridges, bakery tools, decor<br>
-    4. Hire/Sale - trolleys, mobile toilets, equipment<br>
-    5. Mobile Fun Fair Services<br>
-    6. Built salons, shops, restaurants, mobile food trucks
-    </p>
-  </div>
-
-  <div class="card">
-    <h3>Future Vision</h3>
-    <p style="font-size:11px">Own cosmetics line • Own bakery • Own clothing brand • Full salon services • Branded packaging for everything</p>
   </div>
 </div>
 
@@ -120,17 +108,61 @@ input,select,textarea{width:100%;padding:7px;border-radius:6px;border:1px solid 
 
 <!-- EQUIPMENT -->
 <div id="equipment" class="section">
-  <div class="card"><h3>Equipment for Sale or Hire - Starter Businesses</h3></div>
+  <div class="card"><h3>Equipment for Sale or Hire</h3></div>
   <div class="grid" id="equipGrid"></div>
 </div>
 
-<!-- SERVICES -->
-<div id="services" class="section">
+<!-- 1. DELIVERY ZONES MAP -->
+<div id="delivery" class="section">
   <div class="card">
-    <h3>Construction & Events</h3>
-    <p style="font-size:11px">We build salons, shops, restaurants, mobile food trucks.
-    Mobile fun fair services. Hire trolleys, mobile toilets & more.</p>
-    <button class="btn btn-gold" onclick="whatsapp('Hi, I need a quote for Mobile Fun Fair')">Request Fun Fair Quote</button>
+    <h3>Delivery Zones - Burgersfort & Surrounds</h3>
+    <div id="zonesList"></div>
+    <p style="font-size:9px;color:var(--muted);margin-top:6px">*Deposit required before delivery. Future: global couriers</p>
+  </div>
+</div>
+
+<!-- 2. ADMIN DASHBOARD -->
+<div id="admin" class="section">
+  <div class="card">
+    <h3>Admin - Add Product</h3>
+    <input id="pName" placeholder="Product Name">
+    <input id="pPrice" type="number" placeholder="Price R">
+    <input id="pEmoji" placeholder="Emoji e.g. 💄">
+    <input id="pDesc" placeholder="Description">
+    <select id="pCat">
+      <option value="cosmetics">Cosmetics</option>
+      <option value="apparel">Apparel</option>
+      <option value="equipment">Equipment</option>
+    </select>
+    <button class="btn btn-gold" onclick="addProduct()">Add Product</button>
+  </div>
+  <div class="card">
+    <h3>Stock Tracker <span class="badge">Live</span></h3>
+    <table id="stockTable"><tr><th>Product</th><th>Stock</th><th>Status</th></tr></table>
+  </div>
+</div>
+
+<!-- 3. INVOICE GENERATOR -->
+<div id="invoice" class="section">
+  <div class="card no-print">
+    <h3>Invoice Generator</h3>
+    <input id="custName" placeholder="Customer Name">
+    <textarea id="custItems" placeholder="Paste cart items here"></textarea>
+    <input id="custTotal" type="number" placeholder="Total R">
+    <button class="btn" onclick="genInvoice()">Generate Invoice</button>
+    <button class="btn btn-outline" onclick="window.print()">Print/Save PDF</button>
+  </div>
+  <div id="invoicePreview"></div>
+</div>
+
+<!-- 4. QR CODE SYSTEM -->
+<div id="qr" class="section">
+  <div class="card">
+    <h3>QR Code Generator</h3>
+    <input id="qrText" placeholder="Link or Text e.g. wa.me/2780795436535">
+    <button class="btn" onclick="genQR()">Generate QR</button>
+    <div id="qrCode" style="text-align:center;margin-top:10px"></div>
+    <p style="font-size:9px;color:var(--muted)">Print this on packaging. Customers scan to order.</p>
   </div>
 </div>
 
@@ -145,10 +177,8 @@ input,select,textarea{width:100%;padding:7px;border-radius:6px;border:1px solid 
       <p>📱 079 543 6535</p>
       <p>📧 shrn.dee@gmail.com</p>
       <p>🧾 Reg: 2026/115254/07 | Ref: 9890360192</p>
-      <p>🌐 Online Store + Delivery</p>
     </div>
     <button class="btn" onclick="downloadVCard()">Download Contact vCard</button>
-    <button class="btn btn-outline" onclick="window.print()">Print Card</button>
   </div>
 </div>
 
@@ -156,15 +186,14 @@ input,select,textarea{width:100%;padding:7px;border-radius:6px;border:1px solid 
 <div id="labels" class="section">
   <div class="card">
     <h3>Packaging Label Generator</h3>
-    <input id="labelText" placeholder="Product Name e.g. SHRN DEE Lipstick">
+    <input id="labelText" placeholder="Product Name">
     <select id="labelSize">
       <option value="80x50">80x50mm Sticker</option>
       <option value="100x60">100x60mm Sticker</option>
-      <option value="A4">A4 Sheet</option>
     </select>
     <button class="btn" onclick="generateLabel()">Preview Label</button>
     <div id="labelPreview"></div>
-    <button class="btn btn-outline" onclick="printLabel()">Print Label</button>
+    <button class="btn btn-outline no-print" onclick="window.print()">Print Label</button>
   </div>
 </div>
 
@@ -172,20 +201,9 @@ input,select,textarea{width:100%;padding:7px;border-radius:6px;border:1px solid 
 <div id="contact" class="section">
   <div class="card">
     <h3>Contact & Orders</h3>
-    <p style="font-size:11px"><b>Business:</b> SHRN DEE PTY LTD</p>
-    <p style="font-size:11px"><b>Reg No:</b> 2026/115254/07</p>
-    <p style="font-size:11px"><b>Reference:</b> 9890360192</p>
     <p style="font-size:11px"><b>Phone:</b> <a href="tel:0795436535" style="color:var(--gold)">079 543 6535</a></p>
     <p style="font-size:11px"><b>Email:</b> <a href="mailto:shrn.dee@gmail.com" style="color:var(--gold)">shrn.dee@gmail.com</a></p>
-    <p style="font-size:11px"><b>Address:</b> 235 Phelindaba Sec, Bothashoek, Burgersfort, Limpopo 1150</p>
-    <p style="font-size:11px"><b>Orders:</b> Pay deposit % on checkout, balance on delivery</p>
     <button class="btn btn-gold" onclick="whatsapp('Hi SHRN DEE, I want to place an order')">WhatsApp Orders</button>
-    <button class="btn btn-outline" onclick="window.location.href='mailto:shrn.dee@gmail.com'">Email Us</button>
-  </div>
-
-  <div class="card">
-    <h3>How Ordering Works</h3>
-    <p style="font-size:11px">1. Add products to cart<br>2. Checkout with deposit %<br>3. We confirm + arrange delivery to your area<br>4. Future: global courier service</p>
   </div>
 </div>
 
@@ -196,7 +214,7 @@ input,select,textarea{width:100%;padding:7px;border-radius:6px;border:1px solid 
   <button class="btn" onclick="checkout()">Order via WhatsApp - Pay Deposit</button>
 </div>
 
-<div class="footer">
+<div class="footer no-print">
   <b>SHRN DEE PTY LTD</b><br>
   📞 079 543 6535 | 📧 shrn.dee@gmail.com<br>
   Mission: Easy access to services. Fun daily. Food to keep you smiling.
@@ -204,31 +222,89 @@ input,select,textarea{width:100%;padding:7px;border-radius:6px;border:1px solid 
 
 <script>
 let cart = [];
-const depositPercent = 30; // Change deposit %
-const whatsappNumber = '27795436535'; // Your WhatsApp number with country code
-const emailAddress = 'shrn.dee@gmail.com';
+const depositPercent = 30;
+const whatsappNumber = '2780795436535';
 
-const products = {
+// Products + Stock
+let products = {
   cosmetics: [
-    {name:"Avon Ultra Color Lipstick", price:130, emoji:"💄", desc:"Matte long wear"},
-    {name:"Avon Luck For Her Perfume", price:380, emoji:"🧴", desc:"Floral scent"},
-    {name:"Avon Anew Face Cream", price:210, emoji:"✨", desc:"Anti-ageing"},
-    {name:"Avon Nail Enamel", price:95, emoji:"💅", desc:"Quick dry"}
+    {name:"Avon Ultra Color Lipstick", price:130, emoji:"💄", desc:"Matte long wear", stock:15},
+    {name:"Avon Luck For Her Perfume", price:380, emoji:"🧴", desc:"Floral scent", stock:8}
   ],
   apparel: [
-    {name:"SHEIN Summer Dress", price:299, emoji:"👗", desc:"Trendy fit"},
-    {name:"Temu Gold Earrings", price:65, emoji:"💎", desc:"Hypoallergenic"},
-    {name:"Oversized Hoodie", price:340, emoji:"🧥", desc:"Unisex"},
-    {name:"Casual Sneakers", price:480, emoji:"👟", desc:"Comfort sole"}
+    {name:"SHEIN Summer Dress", price:299, emoji:"👗", desc:"Trendy fit", stock:22},
+    {name:"Temu Gold Earrings", price:65, emoji:"💎", desc:"Hypoallergenic", stock:5}
   ],
   equipment: [
-    {name:"Commercial Deep Fryer", price:2700, emoji:"🍟", desc:"Sale / Hire"},
-    {name:"Double Door Fridge", price:5200, emoji:"🧊", desc:"Commercial"},
-    {name:"Bakery Stand Mixer 20L", price:3500, emoji:"🥄", desc:"Heavy duty"},
-    {name:"Mobile Toilet Unit", price:850, emoji:"🚽", desc:"Hire per day"}
+    {name:"Commercial Deep Fryer", price:2700, emoji:"🍟", desc:"Sale / Hire", stock:3},
+    {name:"Mobile Toilet Unit", price:850, emoji:"🚽", desc:"Hire per day", stock:12}
   ]
 };
 
+// 1. DELIVERY ZONES
+const zones = [
+  {area:"Burgersfort CBD", fee:40},
+  {area:"Bothashoek", fee:35},
+  {area:"Steelpoort", fee:60},
+  {area:"Lydenburg", fee:80},
+  {area:"Twickenham", fee:55}
+];
+function loadZones(){
+  document.getElementById('zonesList').innerHTML = zones.map(z=>
+    `<div class="zone"><span>${z.area}</span><span>R${z.fee}</span></div>`
+  ).join('');
+}
+
+// 2. ADMIN + 5. STOCK TRACKER
+function addProduct(){
+  const name = pName.value, price = +pPrice.value, emoji = pEmoji.value, desc = pDesc.value, cat = pCat.value;
+  if(!name||!price) return alert('Fill name + price');
+  products[cat].push({name,price,emoji:emoji||'📦',desc:desc||'',stock:Math.floor(Math.random()*20)+1});
+  load(cat); loadStock(); pName.value=pPrice.value=pEmoji.value=pDesc.value='';
+  alert('Product added!');
+}
+function loadStock(){
+  const tbl = document.getElementById('stockTable');
+  let rows = '<tr><th>Product</th><th>Stock</th><th>Status</th></tr>';
+  Object.values(products).flat().forEach(p=>{
+    const status = p.stock<5? '<span class="stock-low">Low Stock!</span>' : 'In Stock';
+    rows += `<tr><td>${p.name}</td><td>${p.stock}</td><td>${status}</td></tr>`;
+  });
+  tbl.innerHTML = rows;
+}
+
+// 3. INVOICE GENERATOR
+function genInvoice(){
+  const name = custName.value || 'Customer';
+  const items = custItems.value || cart.map(c=>c.name+' R'+c.price).join('\n');
+  const total = +custTotal.value || cart.reduce((a,b)=>a+b.price,0);
+  const deposit = Math.round(total*depositPercent/100);
+  document.getElementById('invoicePreview').innerHTML = `
+  <div class="card" style="background:#fff;color:#000">
+    <h2 style="color:#d63384">SHRN DEE PTY LTD</h2>
+    <p>Reg: 2026/115254/07 | Ref: 9890360192</p>
+    <p>235 Phelindaba Sec, Bothashoek, Burgersfort 1150</p>
+    <p>Tel: 079 543 6535 | Email: shrn.dee@gmail.com</p>
+    <hr>
+    <h3>INVOICE</h3>
+    <p><b>To:</b> ${name}</p>
+    <p><b>Date:</b> ${new Date().toLocaleDateString()}</p>
+    <pre style="font-size:10px">${items}</pre>
+    <p><b>Total:</b> R${total}</p>
+    <p><b>Deposit ${depositPercent}%:</b> R${deposit}</p>
+    <p style="font-size:9px">Balance due on delivery. Thank you!</p>
+  </div>`;
+}
+
+// 4. QR CODE - using Google Charts API
+function genQR(){
+  const text = qrText.value || 'https://wa.me/2780795436535';
+  document.getElementById('qrCode').innerHTML =
+    `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(text)}" alt="QR">
+     <p style="font-size:9px;margin-top:4px">Scan to WhatsApp Order</p>`;
+}
+
+// PRODUCTS + CART
 function tab(id,btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -237,27 +313,31 @@ function tab(id,btn){
   if(id=='cosmetics') load('cosmetics');
   if(id=='apparel') load('apparel');
   if(id=='equipment') load('equipment');
+  if(id=='delivery') loadZones();
+  if(id=='admin') loadStock();
 }
 
 function load(cat){
   const grid = document.getElementById(cat+'Grid');
   grid.innerHTML = '';
-  products[cat].forEach(p=>{
+  products[cat].forEach((p,i)=>{
     grid.innerHTML += `
     <div class="product">
       <div class="emoji">${p.emoji}</div>
       <h4>${p.name}</h4>
       <p>${p.desc}</p>
       <p style="color:var(--gold);font-size:12px">R${p.price}</p>
-      <p style="font-size:8px;color:var(--muted)">Deposit ${depositPercent}%: R${Math.round(p.price*depositPercent/100)}</p>
-      <button class="btn" onclick="add('${p.name}',${p.price})">Add to Cart</button>
+      <p style="font-size:8px;color:var(--muted)">Stock: ${p.stock}</p>
+      <button class="btn" onclick="add('${p.name}',${p.price},'${cat}',${i})">Add to Cart</button>
     </div>`;
   });
 }
 
-function add(name,price){
+function add(name,price,cat,i){
+  if(products[cat][i].stock<=0) return alert('Out of stock');
   cart.push({name,price});
-  updateCart();
+  products[cat][i].stock--;
+  updateCart(); loadStock();
 }
 
 function updateCart(){
@@ -278,7 +358,7 @@ function checkout(){
   if(cart.length==0)return alert('Cart is empty');
   let total = cart.reduce((a,b)=>a+b.price,0);
   let deposit = Math.round(total*depositPercent/100);
-  let msg = `Hi SHRN DEE PTY LTD\nNew Order:\n${cart.map(c=>c.name+' R'+c.price).join('\n')}\n\nTotal: R${total}\nDeposit ${depositPercent}%: R${deposit}\n\nReg: 2026/115254/07\nRef: 9890360192\nPhone: 079 543 6535\nEmail: shrn.dee@gmail.com\nAddress: 235 Phelindaba Sec, Bothashoek, Burgersfort 1150`;
+  let msg = `Hi SHRN DEE PTY LTD\nNew Order:\n${cart.map(c=>c.name+' R'+c.price).join('\n')}\n\nTotal: R${total}\nDeposit ${depositPercent}%: R${deposit}\n\nReg: 2026/115254/07\nRef: 9890360192\nPhone: 079 543 6535`;
   whatsapp(msg);
 }
 
@@ -287,16 +367,7 @@ function whatsapp(msg){
 }
 
 function downloadVCard(){
-  const vcard = `BEGIN:VCARD
-VERSION:3.0
-FN:SHRN DEE PTY LTD
-ORG:SHRN DEE PTY LTD
-TITLE:Boutique Store & Services
-TEL:0795436535
-EMAIL:shrn.dee@gmail.com
-ADR:;;235 Phelindaba Sec Bothashoek;Burgersfort;Limpopo;1150;South Africa
-NOTE:Reg 2026/115254/07 | Ref 9890360192 | Cosmetics, Apparel, Equipment Hire, Mobile Fun Fair
-END:VCARD`;
+  const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:SHRN DEE PTY LTD\nORG:SHRN DEE PTY LTD\nTEL:0795436535\nEMAIL:shrn.dee@gmail.com\nADR:;;235 Phelindaba Sec Bothashoek;Burgersfort;Limpopo;1150;South Africa\nNOTE:Reg 2026/115254/07 | Ref 9890360192\nEND:VCARD`;
   const blob = new Blob([vcard],{type:'text/vcard'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -306,23 +377,17 @@ END:VCARD`;
 
 function generateLabel(){
   const text = document.getElementById('labelText').value || 'SHRN DEE Product';
-  const size = document.getElementById('labelSize').value;
   document.getElementById('labelPreview').innerHTML = `
-  <div class="label-preview" style="width:${size.split('x')[0]}mm;height:${size.split('x')[1]||'297'}mm">
+  <div class="label-preview">
+    <img src="logo.png" style="width:40px;margin-bottom:4px">
     <h2>SHRN DEE PTY LTD</h2>
     <p>${text}</p>
-    <p style="font-size:8px">Reg: 2026/115254/07</p>
-    <p style="font-size:8px">Tel: 079 543 6535</p>
-    <p style="font-size:8px">shrn.dee@gmail.com</p>
+    <p style="font-size:8px">Reg: 2026/115254/07 | Tel: 079 543 6535</p>
   </div>`;
 }
 
-function printLabel(){
-  window.print();
-}
-
 // Init
-load('cosmetics');
+load('cosmetics'); loadStock();
 </script>
 </body>
 </html>
