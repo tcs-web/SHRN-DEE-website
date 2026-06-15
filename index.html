@@ -77,8 +77,9 @@ td,th{border:1px solid #333;padding:4px;text-align:left}
 <nav>
   <button class="active" onclick="tab('home',this)">Home</button>
   <button onclick="tab('cosmetics',this)">Cosmetics</button>
-  <button onclick="tab('apparel',this)">Apparel</button>
+  <button onclick="tab('apparel',this)">Apparel & jewellery</button>
   <button onclick="tab('equipment',this)">Equipment</button>
+  <button onclick="tab('services',this)">Services</button>
   <button onclick="tab('delivery',this)">Delivery Zones</button>
   <button onclick="tab('admin',this)">Admin</button>
   <button onclick="tab('invoice',this)">Invoice</button>
@@ -98,13 +99,24 @@ td,th{border:1px solid #333;padding:4px;text-align:left}
   </div>
 </div>
 
+  <div class="card">
+    <h3>What We Do</h3>
+    <p style="font-size:11px">
+    1. Avon Cosmetics - available stock, order with deposit %<br>
+    2. Apparel & Jewellery - SHEIN, Temu + trusted suppliers<br>
+    3. Starter Business Kits - fryers, fridges, bakery tools, decor<br>
+    4. Hire/Sale - trolleys, mobile toilets, equipment<br>
+    5. Mobile Fun Fair Services<br>
+    6. We provide all material for salons, shops, restaurants, mobile food trucks for hire<br>
+    </p>
+  </div> 
 <!-- COSMETICS -->
 <div id="cosmetics" class="section">
   <div class="card"><h3>Avon Cosmetics - Deposit % Available</h3></div>
   <div class="grid" id="cosmeticsGrid"></div>
 </div>
 
-<!-- APPAREL -->
+<!-- 1. APPAREL & JEWELLERY-->
 <div id="apparel" class="section">
   <div class="card"><h3>Apparel & Jewellery - SHEIN / Temu</h3></div>
   <div class="grid" id="apparelGrid"></div>
@@ -116,6 +128,16 @@ td,th{border:1px solid #333;padding:4px;text-align:left}
   <div class="grid" id="equipGrid"></div>
 </div>
 
+<!-- SERVICES -->
+<div id="services" class="section">
+  <div class="card">
+    <h3>Construction & Events</h3>
+    <p style="font-size:11px">We provide materials/equipment for salons, shops, restaurants, hire mobile food trucks.
+    Mobile fun fair services. Hire trolleys, mobile toilets & more.</p>
+    <button class="btn btn-gold" onclick="whatsapp('Hi, I need a quote for Mobile Fun Fair')">Request Fun Fair Quote</button>
+  </div>
+</div>
+  
 <!-- 1. DELIVERY ZONES MAP -->
 <div id="delivery" class="section">
   <div class="card">
@@ -205,11 +227,16 @@ td,th{border:1px solid #333;padding:4px;text-align:left}
 <div id="contact" class="section">
   <div class="card">
     <h3>Contact & Orders</h3>
+    <p style="font-size:11px"><b>Business:</b> SHRN DEE PTY LTD</p>
+    <p style="font-size:11px"><b>Reg No:</b> 2026/115254/07</p>
+    <p style="font-size:11px"><b>Reference:</b> 9890360192</p>
     <p style="font-size:11px"><b>Phone:</b> <a href="tel:0795436535" style="color:var(--gold)">079 543 6535</a></p>
-    <p style="font-size:11px"><b>Email:</b> <a href="mailto:shrn.dee01@gmail.com" style="color:var(--gold)">shrn.dee01@gmail.com</a></p>
+    <p style="font-size:11px"><b>Email:</b> <a href="mailto:shrn.dee@gmail.com" style="color:var(--gold)">shrn.dee@gmail.com</a></p>
+    <p style="font-size:11px"><b>Address:</b> 235 Phelindaba Sec, Bothashoek, Burgersfort, Limpopo 1150</p>
+    <p style="font-size:11px"><b>Orders:</b> Pay deposit % on checkout, balance on delivery</p>
     <button class="btn btn-gold" onclick="whatsapp('Hi SHRN DEE, I want to place an order')">WhatsApp Orders</button>
+    <button class="btn btn-outline" onclick="window.location.href='mailto:shrn.dee@gmail.com'">Email Us</button>
   </div>
-</div>
 
 <!-- CART -->
 <div class="cart" id="cartBox" style="display:none">
@@ -226,24 +253,122 @@ td,th{border:1px solid #333;padding:4px;text-align:left}
 
 <script>
 let cart = [];
-const depositPercent = 30;
-const whatsappNumber = '2780795436535';
+const depositPercent = 30; // Change deposit %
+const whatsappNumber = '2780795436535'; // Your WhatsApp number with country code
+const emailAddress = 'shrn.dee@gmail.com';
 
-// Products + Stock
-let products = {
+const products = {
   cosmetics: [
-    {name:"Avon Ultra Color Lipstick", price:130, emoji:"💄", desc:"Matte long wear", stock:15},
-    {name:"Avon Luck For Her Perfume", price:380, emoji:"🧴", desc:"Floral scent", stock:8}
+    {name:"Avon Ultra Color Lipstick", price:130, emoji:"💄", desc:"Matte long wear"},
+    {name:"Avon Luck For Her Perfume", price:380, emoji:"🧴", desc:"Floral scent"},
+    {name:"Avon Anew Face Cream", price:210, emoji:"✨", desc:"Anti-ageing"},
+    {name:"Avon Nail Enamel", price:95, emoji:"💅", desc:"Quick dry"}
   ],
   apparel: [
-    {name:"SHEIN Summer Dress", price:299, emoji:"👗", desc:"Trendy fit", stock:22},
-    {name:"Temu Gold Earrings", price:65, emoji:"💎", desc:"Hypoallergenic", stock:5}
+    {name:"SHEIN Summer Dress", price:299, emoji:"👗", desc:"Trendy fit"},
+    {name:"Temu Gold Earrings", price:65, emoji:"💎", desc:"Hypoallergenic"},
+    {name:"Oversized Hoodie", price:340, emoji:"🧥", desc:"Unisex"},
+    {name:"Casual Sneakers", price:480, emoji:"👟", desc:"Comfort sole"}
   ],
   equipment: [
-    {name:"Commercial Deep Fryer", price:2700, emoji:"🍟", desc:"Sale / Hire", stock:3},
-    {name:"Mobile Toilet Unit", price:850, emoji:"🚽", desc:"Hire per day", stock:12}
+    {name:"Commercial Deep Fryer", price:2700, emoji:"🍟", desc:"Sale / Hire"},
+    {name:"Double Door Fridge", price:5200, emoji:"🧊", desc:"Commercial"},
+    {name:"Bakery Stand Mixer 20L", price:3500, emoji:"🥄", desc:"Heavy duty"},
+    {name:"Mobile Toilet Unit", price:850, emoji:"🚽", desc:"Hire per day"}
   ]
 };
+
+ function tab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(id=='cosmetics') load('cosmetics');
+  if(id=='apparel') load('apparel');
+  if(id=='equipment') load('equipment');
+}
+
+function load(cat){
+  const grid = document.getElementById(cat+'Grid');
+  grid.innerHTML = '';
+  products[cat].forEach(p=>{
+    grid.innerHTML += `
+    <div class="product">
+      <div class="emoji">${p.emoji}</div>
+      <h4>${p.name}</h4>
+      <p>${p.desc}</p>
+      <p style="color:var(--gold);font-size:12px">R${p.price}</p>
+      <p style="font-size:8px;color:var(--muted)">Deposit ${depositPercent}%: R${Math.round(p.price*depositPercent/100)}</p>
+      <button class="btn" onclick="add('${p.name}',${p.price})">Add to Cart</button>
+    </div>`;
+  });
+}
+
+function add(name,price){
+  cart.push({name,price});
+  updateCart();
+}
+
+function updateCart(){
+  document.getElementById('cartCount').innerText = cart.length;
+  document.getElementById('cartBox').style.display = cart.length>0? 'block' : 'none';
+  const items = document.getElementById('cartItems');
+  items.innerHTML = '';
+  let total = 0;
+  cart.forEach((c,i)=>{
+    total += c.price;
+    items.innerHTML += `<div class="cart-item"><span>${c.name}</span><span>R${c.price} <button onclick="cart.splice(${i},1);updateCart()" style="color:red;border:none;background:none">x</button></span></div>`;
+  });
+  items.innerHTML += `<div class="cart-item" style="border-top:1px solid #333;margin-top:4px;padding-top:4px"><b>Total</b><b>R${total}</b></div>`;
+  items.innerHTML += `<div class="cart-item"><span>Deposit ${depositPercent}%</span><b>R${Math.round(total*depositPercent/100)}</b></div>`;
+}
+
+function checkout(){
+  if(cart.length==0)return alert('Cart is empty');
+  let total = cart.reduce((a,b)=>a+b.price,0);
+  let deposit = Math.round(total*depositPercent/100);
+  let msg = `Hi SHRN DEE PTY LTD\nNew Order:\n${cart.map(c=>c.name+' R'+c.price).join('\n')}\n\nTotal: R${total}\nDeposit ${depositPercent}%: R${deposit}\n\nReg: 2026/115254/07\nRef: 9890360192\nPhone: 079 543 6535\nEmail: shrn.dee@gmail.com\nAddress: 235 Phelindaba Sec, Bothashoek, Burgersfort 1150`;
+  whatsapp(msg);
+}
+
+function whatsapp(msg){
+  window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+function downloadVCard(){
+  const vcard = `BEGIN:VCARD
+VERSION:3.0
+FN:SHRN DEE PTY LTD
+ORG:SHRN DEE PTY LTD
+TITLE:Boutique Store & Services
+TEL:0795436535
+EMAIL:shrn.dee01@gmail.com
+ADR:;;235 Phelindaba Sec Bothashoek;Burgersfort;Limpopo;1150;South Africa
+NOTE:Reg 2026/115254/07 | Ref 9890360192 | Cosmetics, Apparel, Equipment Hire, Mobile Fun Fair
+END:VCARD`;
+  const blob = new Blob([vcard],{type:'text/vcard'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'SHRN_DEE_Contact.vcf';
+  a.click();
+}
+
+function generateLabel(){
+  const text = document.getElementById('labelText').value || 'SHRN DEE Product';
+  const size = document.getElementById('labelSize').value;
+  document.getElementById('labelPreview').innerHTML = `
+  <div class="label-preview" style="width:${size.split('x')[0]}mm;height:${size.split('x')[1]||'297'}mm">
+    <h2>SHRN DEE PTY LTD</h2>
+    <p>${text}</p>
+    <p style="font-size:8px">Reg: 2026/115254/07</p>
+    <p style="font-size:8px">Tel: 079 543 6535</p>
+    <p style="font-size:8px">shrn.dee@gmail.com</p>
+  </div>`;
+}
+
+function printLabel(){
+  window.print();
+} 
 
 // 1. DELIVERY ZONES
 const zones = [
